@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "linked_list.h"
+#include "tree.h"
+
+
+int main (int argc, char const *argv[]) {
+
+    printf("argc = %d\n", argc);
+    if (argc < 2) {
+        printf("1 = queue&stack, 2 = min heap. \n");
+        return -1;
+    }
+    int i =0, j = 0, number = 0;
+    srand(time(NULL));
+    int type = atoi(argv[1]);
+    if (type == 2) {
+        /* implementation of min heap */
+        printf("implementation of min heap.\n");
+        heap_t *heap = new_heap(7);
+        for (i = 1; i < heap->max_size; i++) { 
+            number = rand()%20;
+            printf("Insertion %d: \n", number);
+            min_heap_insertion(heap, number);
+            for (j = 1; j < heap->max_size; j++)
+                printf("%d | ", heap->head[j].key);
+            printf("\n");
+        }
+        for (i = 1; i < heap->max_size; i++) {
+            printf("Round %d:\n", i);
+            printf("Pop element: %d\n", min_heap_pop(heap)->key);
+            for (j = 1; j < heap->max_size; j++)
+                printf("%d | ", heap->head[j].key);
+            printf("\n");
+        }
+    }
+    else if (type == 1) {
+        /* implementation of Queue and Stack */
+        list_t *list = list_new();
+        printf("Queue\n");
+        printf("Enqueue:-----------------------------------\n");
+        for (i = 0; i < 10; i++) {
+            printf("insert %d\n", i);
+            enqueue(list, i);
+            list_print(list);
+        }
+        printf("Dequeue:-----------------------------------\n");
+        for (i = 0; i < 10; i++) {
+            printf("dequeue : %d\n", dequeue(list)->data);
+            list_print(list);
+        }
+        printf("Stack\n");
+        printf("Push:-----------------------------------\n");
+        for (i = 0; i < 10; i++) {
+            printf("push %d\n", i);
+            stack_push(list, i);
+            list_print(list);
+        }
+        printf("Pop:-----------------------------------\n");
+        for (i = 0; i < 10; i++) {
+            printf("pop : %d\n", stack_pop(list)->data);
+            list_print(list);
+        }
+    }
+    else
+        printf("?????????????");
+    return 0;
+}
