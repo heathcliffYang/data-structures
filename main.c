@@ -19,12 +19,17 @@ int main (int argc, char const *argv[]) {
         /* implementation of min heap */
         printf("implementation of min heap.\n");
         heap_t *heap = new_heap(7);
+        for (j = 1; j < heap->max_size; j++)
+            printf("%d | ", heap->head[j].key);
+        printf("\n");
         for (i = 1; i < heap->max_size; i++) { 
             number = rand()%20;
             printf("Insertion %d: \n", number);
             min_heap_insertion(heap, number);
-            for (j = 1; j < heap->max_size; j++)
+            for (j = 1; j < heap->max_size; j++) {
+                printf("[%d]: ", j);
                 printf("%d | ", heap->head[j].key);
+            }
             printf("\n");
         }
         for (i = 1; i < heap->max_size; i++) {
@@ -62,6 +67,26 @@ int main (int argc, char const *argv[]) {
             printf("pop : %d\n", stack_pop(list)->data);
             list_print(list);
         }
+    }
+    else if (type == 3) {
+        /* implementation of Binary Search Tree. */
+        tree_t *binary_search_tree = new_tree();
+        int keys[10]= {};
+        printf("implementation of Binary Search Tree.\n");
+        for (i = 0; i < 10; i++) {
+            number = rand()%20;
+            keys[i] = number;
+            printf("Insert: %d\n", keys[i]);
+            binary_search_insert(binary_search_tree, number);
+        }
+        printf("Insertion complete.");
+        is_binary_search_tree(binary_search_tree->root);
+        printf("Start to delete.");
+        for (i = 0; i < 10; i++) {
+            binary_search_delete(binary_search_tree, keys[i]);
+            is_binary_search_tree(binary_search_tree->root);
+        }
+        printf("Binary search tree demonstration is done.");
     }
     else
         printf("?????????????");
