@@ -72,21 +72,29 @@ int main (int argc, char const *argv[]) {
         /* implementation of Binary Search Tree. */
         tree_t *binary_search_tree = new_tree();
         int keys[10]= {};
+        node_tree_t *tmp;
         printf("implementation of Binary Search Tree.\n");
         for (i = 0; i < 10; i++) {
             number = rand()%20;
             keys[i] = number;
             printf("Insert: %d\n", keys[i]);
             binary_search_insert(binary_search_tree, number);
+            tmp = binary_search_tree->root;
         }
-        printf("Insertion complete.");
+        printf("Insertion complete.\n");
         is_binary_search_tree(binary_search_tree->root);
-        printf("Start to delete.");
+        printf("Start to delete.\n");
         for (i = 0; i < 10; i++) {
-            binary_search_delete(binary_search_tree, keys[i]);
-            is_binary_search_tree(binary_search_tree->root);
+            if (binary_search(binary_search_tree->root, keys[9 - i])) {
+                binary_search_delete(binary_search_tree, keys[9 - i]);
+                printf("Delete - %d\n", keys[9 - i]);
+            }
+            else
+                continue;
+            if (binary_search_tree->size > 0)
+                is_binary_search_tree(binary_search_tree->root);
         }
-        printf("Binary search tree demonstration is done.");
+        printf("Binary search tree demonstration is done.\n");
     }
     else
         printf("?????????????");
