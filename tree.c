@@ -170,70 +170,122 @@ tree_t *binary_search_insert(tree_t *tree, int key) {
     return tree;
 }
 
+void binary_search_replace(node_tree_t *previous, int side) {
+    node_tree_t *tmp, *old;
+    if (side == 0) {
+        if (previous->left->right != NULL) {
+            // Find largest node in the right sub-tree.
+            tmp = previous->left->right;
+            if (tmp->left) {
+                while (tmp->left) {
+                    old = tmp;
+                    tmp = tmp->left;
+                }
+                previous->left->data = tmp->data;
+                old->left = NULL;
+            } else
+                previous->left = tmp;
+        } else if (previous->left->left != NULL) {
+            tmp = previous->left->left;
+            if (tmp->right) {
+                while (tmp->right) {
+                    old = tmp;
+                    tmp = tmp->right;
+                }
+                previous->left->data = tmp->data;
+                old->right = NULL;
+            } else
+                previous->left = tmp;
+        } else { // leaf
+            previous->left = NULL;
+        }
+    } else if (side == 1) {
+        if (previous->right->right != NULL) {
+            tmp = previous->right->right;
+            if (tmp->left) {
+                while (tmp->left) {
+                    old = tmp;
+                    tmp = tmp->left;
+                }
+                previous->right->data = tmp->data;
+                old->left = NULL;
+            } else
+                previous->right = tmp;
+        } else if (previous->right->left != NULL) {
+            tmp = previous->right->left;
+            if (tmp->right) {
+                while (tmp->right) {
+                    old = tmp;
+                    tmp = tmp->right;
+                }
+                previous->right->data = tmp->data;
+                old->right = NULL;
+            } else
+                previous->right = tmp;
+        } else { //leaf
+            previous->right = NULL;
+        }
+    } else if (side == 2) {
+        if (previous->right != NULL) {
+             tmp = previous->right;
+             if (tmp->left) {
+                  while (tmp->left) {
+                      old = tmp;
+                      tmp = tmp->left;
+                  }
+                  previous->data = tmp->data;
+                  old->left = NULL;
+              } else
+                  previous = tmp;
+        } else if (previous->left != NULL) {
+              tmp = previous->left;
+              if (tmp->right) {
+                   while (tmp->right) {
+                     old = tmp;
+                      tmp = tmp->right;
+                   }
+                   previous->data = tmp->data;
+                   old->right = NULL;
+              } else
+                 previous = tmp;
+         } else { //leaf
+              previous = NULL;
+         }
+    }
+}
+
 tree_t *binary_search_delete(tree_t *tree, int key) {
     node_tree_t *index = tree->root;
     node_tree_t *previous = index;
-    int i = 0;
+    int side = 0;
     while (index) {
-        if (key == index->data) {
-            if (index == tree->root) {
-                if (index->right != NULL)
-                    tree->root = index->right;
-                else {
-                    tree->root = index->left;
-                    tree->size -= 1;
-                    printf("Doneeeeeeeeeeeeeeeeeeeeeee, %d \n", tree->size);
-                    return tree;
-                }
-                index = index->right;
-                previous = tree->root;
-            }
-            if (i == 0) {
-                if (index->right != NULL)
-                    previous->left = index->right;
-                else {
-                    previous->left = index->left;
-                    tree->size -= 1;
-                    return tree;
-                }
-                previous = previous->left;
-            }
-            else {
-                if (index->right != NULL)
-                    previous->right = index->right;
-                else {
-                    previous->right = index->left;
-                    tree->size -= 1;
-                    return tree;
-                }
-                previous = previous->right;
-            }
-            index = index->right;
-            while (index) {
-                if (index->right != NULL)
-                    previous->right = index->right;
-                else {
-                    previous->right = index->left;
-                    tree->size -= 1;
-                    return tree;
-                }
-                previous = previous->right;
-                index = index->right;
-            }
-            tree->size -= 1;
-            return tree;
-        }
-        else
-            previous = index;
         if (key < index->data) {
-            i = 0;
+            printf("left!  ");
+            side = 0;
+            previous = index;
             index = index->left;
         }
         else if (key > index->data) {
-            i = 1;
+            printf("right! ");
+            side = 1;
+            previous = index;
             index = index->right;
+        } else { // Found
+            printf("Found!\n");
+            if (tree->size == 1) {
+                printf("ROOT\n");
+                tree->root = NULL;
+                tree->size = 0;
+                return tree;
+            } else if (index == tree->root)
+                side = 2;
+            binary_search_replace(previous, side);
+            tree->size -= 1;
+            printf("There are %d nodes.\n", tree->size);
+            return tree;
         }
     }
+    printf("There is no node.\n");
     return NULL;
 }
 
@@ -254,7 +306,6 @@ void *is_binary_search_tree(node_tree_t *index) {
             exit(EXIT_FAILURE);
         }
     }
-    printf("!!!!!!!!!!\n");
 }
 
 node_tree_t *new_tree_node(int data) {

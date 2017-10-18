@@ -46,6 +46,7 @@ node_tree_t *binary_search(node_tree_t *root, int key);
 node_tree_t *binary_search_iter(node_tree_t *root, int key);
 tree_t *binary_search_insert(tree_t *tree, int key);
 /* The deleted node is replaced by either the largest pair in its left subtree or the smallest one in its right subtree. */ 
+void binary_search_replace(node_tree_t *previous, int side);
 tree_t *binary_search_delete(tree_t *tree, int key);
 void *is_binary_search_tree(node_tree_t *index);
 

@@ -85,9 +85,9 @@ int main (int argc, char const *argv[]) {
         is_binary_search_tree(binary_search_tree->root);
         printf("Start to delete.\n");
         for (i = 0; i < 10; i++) {
-            if (binary_search(binary_search_tree->root, keys[9 - i])) {
-                binary_search_delete(binary_search_tree, keys[9 - i]);
-                printf("Delete - %d\n", keys[9 - i]);
+            if (binary_search(binary_search_tree->root, keys[i])) {
+                binary_search_delete(binary_search_tree, keys[i]);
+                printf("Delete - %d\n", keys[i]);
             }
             else
                 continue;
