@@ -184,8 +184,7 @@ void binary_search_replace(node_tree_t *previous, int side) {
                     tmp = tmp->left;
                 }
                 previous->left->data = tmp->data;
-                old->left = NULL;
-                printf("Right smallest:Take the leaf %d to replace.\n", tmp->data);
+                old->left = old->left->right;
                 /* end */
             } else {
                 /* Need to change the structure */
@@ -202,7 +201,7 @@ void binary_search_replace(node_tree_t *previous, int side) {
                     tmp = tmp->right;
                 }
                 previous->left->data = tmp->data;
-                old->right = NULL;
+                old->right = old->right->left;
             } else
                 previous->left = tmp;
         } else { // leaf
@@ -218,7 +217,7 @@ void binary_search_replace(node_tree_t *previous, int side) {
                     tmp = tmp->left;
                 }
                 previous->right->data = tmp->data;
-                old->left = NULL;
+                old->left = old->left->right;
             } else {
                 old = previous->right->left;
                 previous->right = tmp;
@@ -232,7 +231,7 @@ void binary_search_replace(node_tree_t *previous, int side) {
                     tmp = tmp->right;
                 }
                 previous->right->data = tmp->data;
-                old->right = NULL;
+                old->right = old->right->left;
             } else
                 previous->right = tmp;
         } else { //leaf
@@ -244,6 +243,7 @@ void binary_search_replace(node_tree_t *previous, int side) {
 tree_t *binary_search_delete(tree_t *tree, int key) {
     node_tree_t *index = tree->root;
     node_tree_t *previous = index;
+    node_tree_t *tmp, *old;
     int side = 0;
     while (index) {
         if (key < index->data) {
@@ -256,9 +256,7 @@ tree_t *binary_search_delete(tree_t *tree, int key) {
             previous = index;
             index = index->right;
         } else { // Found
-            printf("Found!\n");
             if (tree->size == 1) {
-                printf("ROOT\n");
                 tree->root = NULL;
                 tree->size = 0;
                 return tree;
@@ -267,23 +265,21 @@ tree_t *binary_search_delete(tree_t *tree, int key) {
                     /* Take right side into consideration first */
                     if (tree->root->right->left == NULL) {
                         /* Need to change the structure */
-                        node_tree_t *tmp = tree->root->left;
+                        tmp = tree->root->left;
                         tree->root = tree->root->right;
                         tree->root->left = tmp;
-                        printf("Can change the structure. (root)\n");
                         tree->size -= 1;
                         return tree;
                     } else {
                         /* Just take the leaf */
-                        node_tree_t *tmp = tree->root->right;
-                        node_tree_t *old = tmp;
+                        tmp = tree->root->right;
+                        old = tmp;
                         while (tmp->left) {
                             old = tmp;
                             tmp = tmp->left;
                         }
                         tree->root->data = tmp->data;
-                        old->left = NULL;
-                        printf("Can take the leaf %d. (root)\n", tmp->data);
+                        old->left = old->left->right;
                         tree->size -= 1;
                         return tree;
                     }
@@ -296,7 +292,6 @@ tree_t *binary_search_delete(tree_t *tree, int key) {
             }
             binary_search_replace(previous, side);
             tree->size -= 1;
-            printf("There are %d nodes.\n", tree->size);
             return tree;
         }
     }
