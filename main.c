@@ -82,7 +82,7 @@ int main (int argc, char const *argv[]) {
             tmp = binary_search_tree->root;
         }
         printf("Insertion complete.\n");
-        is_binary_search_tree(binary_search_tree->root);
+        inorder(binary_search_tree->root);
         printf("Start to delete.\n");
         for (i = 0; i < 10; i++) {
             if (binary_search(binary_search_tree->root, keys[i])) {
@@ -92,7 +92,7 @@ int main (int argc, char const *argv[]) {
             else
                 continue;
             if (binary_search_tree->size > 0)
-                is_binary_search_tree(binary_search_tree->root);
+                inorder(binary_search_tree->root);
         }
         printf("Binary search tree demonstration is done.\n");
     }
